@@ -138,6 +138,7 @@
 "github:xolox/vim-misc"
 "github:zchee/deoplete-jedi"
 "github:zchee/deoplete-go"
+"github:andviro/flake8-vim"
 "goyo"
 "matchit.zip"
 "pathogen"
