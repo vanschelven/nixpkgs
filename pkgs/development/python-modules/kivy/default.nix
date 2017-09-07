@@ -68,8 +68,6 @@ buildPythonPackage rec {
 
     pillow
 
-    # Not actually working, as noted in:
-    # https://groups.google.com/forum/#!topic/nix-devel/CPQKpM3u1EY
     pkgs.mtdev
     ] ;
 
@@ -81,6 +79,11 @@ buildPythonPackage rec {
   checkPhase = ''
     export KIVY_NO_CONFIG=1
     nosetests
+  '';
+
+  postPatch = ''
+   substituteInPlace kivy/lib/mtdev.py \
+     --replace "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${pkgs.mtdev}/lib/libmtdev.so.1')"
   '';
 
   meta = {
