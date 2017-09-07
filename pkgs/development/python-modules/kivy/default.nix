@@ -1,0 +1,94 @@
+{ stdenv, buildPythonPackage, maintainers, platforms, licenses, pkgs, self }:
+
+# From the 1.10.0 documentation:
+# "This version of Kivy requires at least Cython version 0.23, and has been
+# tested through 0.25.2. Later versions may work, but as they have not been
+# tested there is no guarantee."
+assert stdenv.lib.versionAtLeast self.cython.version "0.23";
+assert stdenv.lib.versionOlder self.cython.version "0.25.3";
+
+buildPythonPackage rec {
+  name = "Kivy-1.10.0";
+
+  src = pkgs.fetchurl {
+    url = "mirror://pypi/k/kivy/${name}.tar.gz";
+    sha256 = "1394zh6kvf7k5d8vlzxcsfcailr3q59xwg9b1n7qaf25bvyq1h98";
+  };
+
+  # setup.py invokes git on build but we're fetching a tarball, so
+  # can't retrieve git version. We remove the git-invocation from setup.py
+  patches = [
+    ./setup.py.patch
+  ];
+
+  buildInputs = with self; [
+    pkgconfig
+    cython
+
+    kivygarden  # See https://github.com/kivy/kivy/issues/5367 suggestion I-2
+    requests2  # See https://github.com/kivy/kivy/issues/5367 suggestion I-3
+    docutils # See https://github.com/kivy/kivy/issues/5367 question Q-5
+    pygments # See https://github.com/kivy/kivy/issues/5367 question Q-6
+
+    # nose  # needed for tests (which are currently disabled)
+
+    # The setup below is, as much as I can figure out how to make it, an attempt
+    # to create a "canonical full install" of Kivy on linux, as allued to in
+    # https://github.com/kivy/kivy/issues/5367 question Q-7
+
+    # Some sources to reconstruct such a thing are:
+    # .travis.yml (which contains the actual build instructions for CI)
+    # https://kivy.org/docs/installation/installation.html
+    # https://kivy.org/docs/installation/installation-linux.html
+
+    pkgs.mesa  # This is OpenGL
+
+    pkgs.SDL2
+    pkgs.SDL2_image
+    pkgs.SDL2_ttf
+    pkgs.SDL2_mixer
+
+    # The degree to which gstreamer actually works was not tested
+    pkgs.gst_all_1.gstreamer
+    pkgs.gst_all_1.gst-plugins-base
+    pkgs.gst_all_1.gst-plugins-good
+    pkgs.gst_all_1.gst-plugins-bad
+
+    # Not done yet:
+    # "Camera is also unclear in the cross-platform sense, though for a
+    # canonical linux configuration the answer is probably opencv. SDL2 for
+    # image provider qualifies as "canonical", though it is my impression that
+    # ffpyplayer has wider and better format support."
+    ];
+
+  propagatedBuildInputs = with self; [
+    # Running the tests after build-time may be achieved by activating nose as a runtime
+    # dependency and running `nosetests` from $out/kivy
+    # nose
+
+    pillow
+
+    # Not actually working, as noted in:
+    # https://groups.google.com/forum/#!topic/nix-devel/CPQKpM3u1EY
+    pkgs.mtdev
+    ] ;
+
+  # We're not currently running tests, because there are 38 errors and 1 failure
+  # This number may be reduced somewhat once https://github.com/kivy/kivy/issues/5373 is fixed
+  doCheck = false;
+
+  # KIVY_NO_CONFIG is needed, because otherwise tests attempt to write to the non-existing $HOME
+  checkPhase = ''
+    export KIVY_NO_CONFIG=1
+    nosetests
+  '';
+
+  meta = {
+    description = "A software library for rapid development of hardware-accelerated multitouch applications.";
+    homepage    = "https://pypi.python.org/pypi/kivy";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ vanschelven ];
+    platforms   = platforms.unix;  # Can only test linux; in principle other platforms are supported
+  };
+
+}
