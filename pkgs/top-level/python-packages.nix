@@ -6902,28 +6902,9 @@ in {
 
   keyutils = callPackage ../development/python-modules/keyutils { };
 
-  kivy = callPackage ../development/python-modules/kivy { inherit stdenv buildPythonPackage maintainers platforms licenses pkgs self ; };
+  kivy = callPackage ../development/python-modules/kivy { inherit stdenv buildPythonPackage fetchPypi maintainers platforms licenses pkgs self ; };
 
-  kivygarden = buildPythonPackage rec {
-    # The sole reason for this package is that it is a (questionable) dependency of Kivy
-    name = "kivy-garden-0.1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kivy-garden/${name}.tar.gz";
-      sha256 = "0wkcpr2zc1q5jb0bi7v2dgc0vs5h1y7j42mviyh764j2i0kz8mn2";
-    };
-
-    buildInputs = with self; [ requests ];
-
-    meta = {
-      description = "The kivy garden installation script, split into its own package for convenient use in buildozer.";
-
-      homepage    = "https://pypi.python.org/pypi/kivy-garden";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vanschelven ];
-      platforms   = platforms.unix;  # Can only test linux; in principle other platforms are supported
-    };
-  };
+  kivygarden = callPackage ../development/python-modules/kivy/kivy-garden.nix { inherit buildPythonPackage fetchPypi maintainers platforms licenses pkgs self ; };
 
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
