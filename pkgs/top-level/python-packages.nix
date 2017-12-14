@@ -10126,10 +10126,9 @@ in {
       sha256 = "1wkrxj1jmf2dyx207fc9ysyns9h27gls3drgg05mzdckjqr5lnl6";
     };
 
-    propagatedBuildInputs = with self; [ six protobuf3_3 ];
-
-    # TODO for python 2: futures
-    # TODO for python < 3.4: enum34
+    propagatedBuildInputs = with self; [ six protobuf3_3 ]
+                          ++ optionals (isPy26 || isPy27 || isPy34) [ enum34 ]
+                          ++ optionals (isPy26 || isPy27) [ futures ];
 
     meta = {
       description = "HTTP/2-based RPC framework";
