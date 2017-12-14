@@ -9879,49 +9879,9 @@ in {
     propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
   };
 
-  googleapis_common_protos = buildPythonPackage rec {
-    name = "googleapis-common-protos-${version}";
-    version = "1.5.3";
+  googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
 
-    src = self.fetchPypi {
-      pname = "googleapis-common-protos";
-      inherit version;
-      sha256 = "1whfjl44gy15ha6palpwa2m0xi36dsvpaz8vw0cvb2k2lbdfsxf0";
-    };
-
-    propagatedBuildInputs = with self; [ protobuf3_3 ];
-    buildInputs = with self; [ pytest ];
-
-    doCheck = false;  # there are no tests
-
-    meta = {
-      description = "Common protobufs used in Google APIs";
-      license = "apache";
-    };
-  };
-
-  google_api_core = buildPythonPackage rec {
-    name = "google-api-core-${version}";
-    version = "0.1.2";
-
-    src = self.fetchPypi {
-      pname = "google-api-core";
-      inherit version;
-      sha256 = "0qmjswj079w7q7zbnh8p4n2r3f831wymm9hfdlc7zfrini7184xv";
-    };
-
-    propagatedBuildInputs = with self; [ google_auth protobuf3_3 googleapis_common_protos requests grpcio ];
-    buildInputs = with self; [ setuptools mock pytest ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "This library is not meant to stand-alone. Instead it defines common helpers used by all Google API clients.";
-      license = "apache";
-    };
-  };
+  google_api_core = callPackage ../development/python-modules/google_api_core { };
 
   google_api_python_client = buildPythonPackage rec {
     name = "google-api-python-client-${version}";
@@ -9971,115 +9931,13 @@ in {
     };
   };
 
-  google_auth = buildPythonPackage rec {
-    name    = "google-auth-${version}";
-    version = "1.2.1";
+  google_auth = callPackage ../development/python-modules/google_auth { };
 
-    src = self.fetchPypi {
-      pname = "google-auth";
-      inherit version;
-      sha256 = "041qpwlvpawggasvbfpkx39mkg4dgvivj831x7kinidayrf46w3i";
-    };
+  google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
 
-    buildInputs = with self; [
-      pytest
-      mock
-      oauth2client
-      flask
-      requests
-      urllib3
-      pytest-localserver
-      ];
-    propagatedBuildInputs = with self; [ six pyasn1-modules cachetools rsa ];
+  google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
-    # The removed test tests the working together of google_auth and google's https://pypi.python.org/pypi/oauth2client
-    # but the latter is deprecated. Since it is not currently part of the nixpkgs collection and deprecated it will
-    # probably never be. We just remove the test to make the tests work again.
-    postPatch = ''rm tests/test__oauth2client.py'';
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "This library simplifies using Google’s various server-to-server authentication mechanisms to access Google APIs.";
-      license = "apache";
-    };
-  };
-
-  google_cloud_core = buildPythonPackage rec {
-    name    = "google-cloud-core-${version}";
-    version = "0.28.0";
-
-    src = self.fetchPypi {
-      pname = "google-cloud-core";
-      inherit version;
-      sha256 = "1h8bx99ksla48zkb7bhkqy66b8prg49dp15alh851vzi9ii2zii7";
-    };
-
-    propagatedBuildInputs = with self; [ google_api_core grpcio ];
-    buildInputs = with self; [ pytest mock ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "API Client library for Google Cloud: Core Helpers";
-      license = "apache";
-    };
-  };
-
-
-  google_cloud_speech = buildPythonPackage rec {
-    name    = "google-cloud-speech-${version}";
-    version = "0.30.0";
-
-    src = self.fetchPypi {
-      pname = "google-cloud-speech";
-      inherit version;
-      sha256 = "0ckigh6bfzhflhllqdnfygm8w0r6ncp0myf1midifx7sn880g4pa";
-    };
-
-    propagatedBuildInputs = with self; [ google_api_core google_gax google_cloud_core ];
-    buildInputs = with self; [ pytest mock ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Cloud Speech API enables integration of Google speech recognition into applications.";
-      license = "apache";
-    };
-  };
-
-  google_gax = buildPythonPackage rec {
-    name    = "google-gax-${version}";
-    version = "0.15.16";
-
-    src = self.fetchPypi {
-      pname = "google-gax";
-      inherit version;
-      sha256 = "0p1ribd2xy7a04wnjv12agkcdi6f9cpj838884hayx07p5g8v3ji";
-    };
-
-    propagatedBuildInputs = with self; [ google_auth ply protobuf3_3 grpcio requests googleapis_common_protos dill future ];
-    buildInputs = with self; [ pytest mock unittest2 ];
-
-    # Importing test__grpc_google_auth fails with "ModuleNotFoundError: No module named 'google_auth_httplib2'", where
-    # that file would be is unclear to me so I just remove the test.
-    postPatch = ''rm tests/test__grpc_google_auth.py'';
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Google API Extensions for Python (gax-python) tools based on gRPC and Google API conventions.";
-      license     = "bsd";
-    };
-  };
+  google_gax = callPackage ../development/python-modules/google_gax { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -10116,25 +9974,7 @@ in {
     pythonPackages = self;
   } else throw "grib-api not supported for interpreter ${python.executable}";
 
-  grpcio = buildPythonPackage rec {
-    name = "grpcio-${version}";
-    version = "1.7.3";
-
-    src = self.fetchPypi {
-      pname = "grpcio";
-      inherit version;
-      sha256 = "1wkrxj1jmf2dyx207fc9ysyns9h27gls3drgg05mzdckjqr5lnl6";
-    };
-
-    propagatedBuildInputs = with self; [ six protobuf3_3 ]
-                          ++ optionals (isPy26 || isPy27 || isPy34) [ enum34 ]
-                          ++ optionals (isPy26 || isPy27) [ futures ];
-
-    meta = {
-      description = "HTTP/2-based RPC framework";
-      license     = licenses.bsd3;
-    };
-  };
+  grpcio = callPackage ../development/python-modules/grpcio { };
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
