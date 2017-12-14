@@ -9879,6 +9879,51 @@ in {
     propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
   };
 
+  googleapis_common_protos = buildPythonPackage rec {
+    name = "googleapis-common-protos-${version}";
+    version = "1.5.3";
+
+    src = self.fetchPypi {
+      pname = "googleapis-common-protos";
+      inherit version;
+      sha256 = "1whfjl44gy15ha6palpwa2m0xi36dsvpaz8vw0cvb2k2lbdfsxf0";
+    };
+
+    propagatedBuildInputs = with self; [ protobuf3_3 ];
+
+    # ImportError: No module named 'google.protobuf' ... not well-understood, because
+    # activating the build enviroment shows google.protobuf can be imported just fine.
+    doCheck = false;
+
+    meta = {
+      description = "Common protobufs used in Google APIs";
+      license = "apache";
+    };
+  };
+
+  google_api_core = buildPythonPackage rec {
+    name = "google-api-core-${version}";
+    version = "0.1.2";
+
+    src = self.fetchPypi {
+      pname = "google-api-core";
+      inherit version;
+      sha256 = "0qmjswj079w7q7zbnh8p4n2r3f831wymm9hfdlc7zfrini7184xv";
+    };
+
+    propagatedBuildInputs = with self; [ google_auth protobuf3_3 googleapis_common_protos requests grpcio ];
+    buildInputs = with self; [ setuptools mock pytest ];
+
+    # ImportError: No module named 'google.protobuf' ... not well-understood, because
+    # activating the build enviroment shows google.protobuf can be imported just fine.
+    doCheck = false;
+
+    meta = {
+      description = "This library is not meant to stand-alone. Instead it defines common helpers used by all Google API clients.";
+      license = "apache";
+    };
+  };
+
   google_api_python_client = buildPythonPackage rec {
     name = "google-api-python-client-${version}";
     version = "1.5.1";
@@ -9927,6 +9972,96 @@ in {
     };
   };
 
+  google_auth = buildPythonPackage rec {
+    name    = "google-auth-${version}";
+    version = "1.2.1";
+
+    src = self.fetchPypi {
+      pname = "google-auth";
+      inherit version;
+      sha256 = "041qpwlvpawggasvbfpkx39mkg4dgvivj831x7kinidayrf46w3i";
+    };
+
+    buildInputs = with self; [ pytest mock ];
+    propagatedBuildInputs = with self; [ six pyasn1-modules cachetools rsa ];
+
+    # Various tests expect requests, urllib3 etc.; I will first play with the google-stack manually to figure
+    # out whether these are actual requirements or just "nice to haves"
+    doCheck = false;
+
+    meta = {
+      description = "This library simplifies using Google’s various server-to-server authentication mechanisms to access Google APIs.";
+      license = "apache";
+    };
+  };
+
+  google_cloud_core = buildPythonPackage rec {
+    name    = "google-cloud-core-${version}";
+    version = "0.28.0";
+
+    src = self.fetchPypi {
+      pname = "google-cloud-core";
+      inherit version;
+      sha256 = "1h8bx99ksla48zkb7bhkqy66b8prg49dp15alh851vzi9ii2zii7";
+    };
+
+    propagatedBuildInputs = with self; [ google_api_core grpcio ];
+
+    # ImportError: No module named 'google.protobuf' ... not well-understood, because
+    # activating the build enviroment shows google.protobuf can be imported just fine.
+    doCheck = false;
+
+    meta = {
+      description = "API Client library for Google Cloud: Core Helpers";
+      license = "apache";
+    };
+  };
+
+
+  google_cloud_speech = buildPythonPackage rec {
+    name    = "google-cloud-speech-${version}";
+    version = "0.30.0";
+
+    src = self.fetchPypi {
+      pname = "google-cloud-speech";
+      inherit version;
+      sha256 = "0ckigh6bfzhflhllqdnfygm8w0r6ncp0myf1midifx7sn880g4pa";
+    };
+
+    propagatedBuildInputs = with self; [ google_api_core google_gax google_cloud_core ];
+
+    # ImportError: No module named 'google.protobuf' ... not well-understood, because
+    # activating the build enviroment shows google.protobuf can be imported just fine.
+    doCheck = false;
+
+    meta = {
+      description = "Cloud Speech API enables integration of Google speech recognition into applications.";
+      license = "apache";
+    };
+  };
+
+  google_gax = buildPythonPackage rec {
+    name    = "google-gax-${version}";
+    version = "0.15.16";
+
+    src = self.fetchPypi {
+      pname = "google-gax";
+      inherit version;
+      sha256 = "0p1ribd2xy7a04wnjv12agkcdi6f9cpj838884hayx07p5g8v3ji";
+    };
+
+    propagatedBuildInputs = with self; [ google_auth ply protobuf3_3 grpcio requests googleapis_common_protos dill future ];
+
+    # ImportError: No module named 'google.protobuf' ... not well-understood, because
+    # activating the build enviroment shows google.protobuf can be imported just fine.
+    doCheck = false;
+
+    meta = {
+      description = "Google API Extensions for Python (gax-python) tools based on gRPC and Google API conventions.";
+      license     = "bsd";
+    };
+  };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
@@ -9961,6 +10096,27 @@ in {
     enablePython = true;
     pythonPackages = self;
   } else throw "grib-api not supported for interpreter ${python.executable}";
+
+  grpcio = buildPythonPackage rec {
+    name = "grpcio-${version}";
+    version = "1.7.3";
+
+    src = self.fetchPypi {
+      pname = "grpcio";
+      inherit version;
+      sha256 = "1wkrxj1jmf2dyx207fc9ysyns9h27gls3drgg05mzdckjqr5lnl6";
+    };
+
+    propagatedBuildInputs = with self; [ six protobuf3_3 ];
+
+    # TODO for python 2: futures
+    # TODO for python < 3.4: enum34
+
+    meta = {
+      description = "HTTP/2-based RPC framework";
+      license     = licenses.bsd3;
+    };
+  };
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
@@ -13957,12 +14113,12 @@ in {
 
    cachetools = buildPythonPackage rec {
      name = "cachetools-${version}";
-     version = "1.1.3";
+     version = "2.0.1";
      disabled = isPyPy;  # a test fails
 
      src = pkgs.fetchurl {
        url = "mirror://pypi/c/cachetools/${name}.tar.gz";
-       sha256 = "0js7qx5pa8ibr8487lcf0x3a7w0xml0wa17snd6hjs0857kqhn20";
+       sha256 = "0pdw2fr29pxlyn1g5fhdrrqbpn0iw062nv716ngdqvdx7hnizq7d";
      };
 
      meta = with stdenv.lib; {
