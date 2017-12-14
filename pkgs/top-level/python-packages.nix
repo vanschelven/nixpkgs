@@ -9879,6 +9879,10 @@ in {
     propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
   };
 
+  googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
+
+  google_api_core = callPackage ../development/python-modules/google_api_core { };
+
   google_api_python_client = buildPythonPackage rec {
     name = "google-api-python-client-${version}";
     version = "1.5.1";
@@ -9927,6 +9931,14 @@ in {
     };
   };
 
+  google_auth = callPackage ../development/python-modules/google_auth { };
+
+  google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
+
+  google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
+
+  google_gax = callPackage ../development/python-modules/google_gax { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
@@ -9961,6 +9973,8 @@ in {
     enablePython = true;
     pythonPackages = self;
   } else throw "grib-api not supported for interpreter ${python.executable}";
+
+  grpcio = callPackage ../development/python-modules/grpcio { };
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
@@ -13957,12 +13971,12 @@ in {
 
    cachetools = buildPythonPackage rec {
      name = "cachetools-${version}";
-     version = "1.1.3";
+     version = "2.0.1";
      disabled = isPyPy;  # a test fails
 
      src = pkgs.fetchurl {
        url = "mirror://pypi/c/cachetools/${name}.tar.gz";
-       sha256 = "0js7qx5pa8ibr8487lcf0x3a7w0xml0wa17snd6hjs0857kqhn20";
+       sha256 = "0pdw2fr29pxlyn1g5fhdrrqbpn0iw062nv716ngdqvdx7hnizq7d";
      };
 
      meta = with stdenv.lib; {
