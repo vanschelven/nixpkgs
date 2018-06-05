@@ -1,16 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, maintainers, platforms, licenses, pkgs, self }:
 
-# From the 1.10.0 documentation:
-# "This version of Kivy requires at least Cython version 0.23, and has been
-# tested through 0.25.2. Later versions may work, but as they have not been
-# tested there is no guarantee."
-
-assert stdenv.lib.versionAtLeast self.cython.version "0.23";
-
-# Rather than depending on a specific older version of Cython, we accept the
-# off-chance of breakage:
-# assert stdenv.lib.versionOlder self.cython.version "0.25.3";
-
 buildPythonPackage rec {
   pname = "Kivy";
   version = "1.10.0";
@@ -49,7 +38,7 @@ buildPythonPackage rec {
     # https://kivy.org/docs/installation/installation.html
     # https://kivy.org/docs/installation/installation-linux.html
 
-    pkgs.mesa
+    pkgs.mesa_glu
     pkgs.mtdev
 
     pkgs.SDL2
