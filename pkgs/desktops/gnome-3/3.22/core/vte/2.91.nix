@@ -1,15 +1,15 @@
 { stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection, gnutls, pcre2, vala, gperf, libxml2}:
 
 stdenv.mkDerivation rec {
-  versionMajor = "0.48";
-  versionMinor = "3";
+  versionMajor = "0.52";
+  versionMinor = "2";
   moduleName   = "vte";
 
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "1hsqc7238862mqnva5qqdfxnhpwq3ak6zx6kbjj95cs04wcgpad3";
+    sha256 = "1br6kg0wzf1wmww1hadihhcpqbamalqmbppfdzjvzk1ayp75f9hg";
   };
 
   patchPhase = ''
