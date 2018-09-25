@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1hsqc7238862mqnva5qqdfxnhpwq3ak6zx6kbjj95cs04wcgpad3";
   };
 
+  patchPhase = ''
+    patchShebangs ./perf
+    patchShebangs ./src
+  '';
+
   buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses vala gperf libxml2];
 
   propagatedBuildInputs = [ pcre2 gnutls ];
