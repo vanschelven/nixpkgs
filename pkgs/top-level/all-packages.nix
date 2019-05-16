@@ -13053,6 +13053,8 @@ in
 
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
+  vte_291 = callPackage ../development/libraries/vte/2.91.nix { };
+
   vte-ng = callPackage ../development/libraries/vte/ng.nix { };
 
   vtk = callPackage ../development/libraries/vtk {
