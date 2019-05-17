@@ -2577,6 +2577,8 @@ in {
 
   pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
+  rfc3987 = callPackage ../development/python-modules/rfc3987 { };
+
   ConfigArgParse = callPackage ../development/python-modules/configargparse { };
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
