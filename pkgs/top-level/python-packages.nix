@@ -2549,6 +2549,8 @@ in {
 
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
 
+  flask-swagger-ui = callPackage ../development/python-modules/flask-swagger-ui { };
+
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   flask_testing = callPackage ../development/python-modules/flask-testing { };
