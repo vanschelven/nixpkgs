@@ -2575,6 +2575,8 @@ in {
 
   python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
 
+  strict-rfc3339 = callPackage ../development/python-modules/strict-rfc3339 { };
+
   pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
   rfc3987 = callPackage ../development/python-modules/rfc3987 { };
