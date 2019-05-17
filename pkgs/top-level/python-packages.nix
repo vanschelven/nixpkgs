@@ -282,6 +282,8 @@ in {
 
   braintree = callPackage ../development/python-modules/braintree { };
 
+  bravado_core = callPackage ../development/python-modules/bravado_core { };
+
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
   breathe = callPackage ../development/python-modules/breathe { };
