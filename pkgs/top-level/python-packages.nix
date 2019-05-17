@@ -722,6 +722,8 @@ in {
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
+  pytest-flask = callPackage ../development/python-modules/pytest-flask { };
+
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
