@@ -158,6 +158,8 @@ in {
 
   alerta-server = callPackage ../development/python-modules/alerta-server { };
 
+  anytree = callPackage ../development/python-modules/anytree { };
+
   androguard = callPackage ../development/python-modules/androguard { };
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
