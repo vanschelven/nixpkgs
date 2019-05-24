@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # From astroid/__pkginfo__.py
   propagatedBuildInputs = [ lazy-object-proxy six wrapt ]
     ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (pythonOlder "3.7" && !isPyPy) typed-ast;
+    ++ lib.optional (pythonOlder "3.8" && !isPyPy) typed-ast;
 
   checkInputs = [ pytestrunner pytest ];
 
