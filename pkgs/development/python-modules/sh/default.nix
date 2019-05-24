@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   # Disable tests that fail on Darwin
   # Some of the failures are due to Nix using GNU coreutils
-  patches = [ ./disable-broken-tests-darwin.patch ];
+  patches = [ ./disable-broken-tests.patch ];
 
   postPatch = ''
     sed -i 's#/usr/bin/env python#${python.interpreter}#' test.py
