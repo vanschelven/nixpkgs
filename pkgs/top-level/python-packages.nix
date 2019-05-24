@@ -762,6 +762,8 @@ in {
 
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
 
+  python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
