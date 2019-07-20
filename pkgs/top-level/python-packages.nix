@@ -3491,7 +3491,10 @@ in {
 
   pagerduty = callPackage ../development/python-modules/pagerduty { };
 
-  pandas = callPackage ../development/python-modules/pandas { };
+  pandas = if isPy3k then
+    callPackage ../development/python-modules/pandas { }
+  else
+    callPackage ../development/python-modules/pandas/2.nix { };
 
   xlrd = callPackage ../development/python-modules/xlrd { };
 
