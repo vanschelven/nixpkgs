@@ -10,6 +10,8 @@ buildPythonPackage rec {
     sha256 = "0qhisiays582xagndp3vgby6j7ppy6rivw9ycbcc776p0w8s9l21";
   };
 
+  patches = ./setup.py.patch;  # until https://github.com/Yelp/bravado-core/pull/368 is merged
+
   propagatedBuildInputs = [
     python-dateutil
     jsonref
