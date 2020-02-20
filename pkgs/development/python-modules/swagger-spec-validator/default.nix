@@ -11,6 +11,8 @@ buildPythonPackage rec {
     sha256 = "02f8amc6iq2clxxmrz8hirbb57sizaxijp0higqy16shk63ibalw";
   };
 
+  doCheck = false;  # https://github.com/Yelp/swagger_spec_validator/issues/128 / https://github.com/Yelp/swagger_spec_validator/pull/121
+
   checkInputs = [
     pytest
     mock
