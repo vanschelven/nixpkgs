@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, python
-, nose, mock, vcversioner, functools32, rfc3987, strict-rfc3339, webcolors }:
+, nose, mock, vcversioner, functools32 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
@@ -11,15 +11,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose mock vcversioner ];
-  propagatedBuildInputs = [
-    functools32
-
-    # the following 3 packages are included when jsonschema (2.6) is installed
-    # as jsonschema[format]
-    rfc3987
-    strict-rfc3339
-    webcolors
-  ];
+  propagatedBuildInputs = [ functools32 ];
 
   postPatch = ''
     substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py \

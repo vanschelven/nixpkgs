@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, python-dateutil, jsonref, jsonschema,
-  pyyaml, simplejson, six, pytz, msgpack, swagger-spec-validator }:
+  pyyaml, simplejson, six, pytz, msgpack, swagger-spec-validator, rfc3987,
+  strict-rfc3339, webcolors  }:
 
 buildPythonPackage rec {
   pname = "bravado-core";
@@ -22,6 +23,12 @@ buildPythonPackage rec {
     pytz
     msgpack
     swagger-spec-validator
+
+    # the following 3 packages are included when jsonschema (2.6) is installed
+    # as jsonschema[format], which reflects what happens in setup.py
+    rfc3987
+    strict-rfc3339
+    webcolors
   ];
 
   meta = with lib; {
